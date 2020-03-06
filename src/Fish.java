@@ -1,3 +1,8 @@
+import java.awt.Color;
+import java.awt.Graphics;
+import java.awt.image.BufferedImage;
+
+import javax.imageio.ImageIO;
 
 public class Fish {
 	public static BufferedImage image;
@@ -6,12 +11,15 @@ public class Fish {
 	if (needImage) {
 	    loadImage ("Fish.png");
 	    if (gotImage) {
-	    	g.drawImage(image, x, y, width, height, null);
-	    } else {
-	    	g.setColor(Color.BLUE);
-	    	g.fillRect(x, y, width, height);
+	    	g.drawImage(image, 0, 0, 800, 600, null);
 	    }
-	    void loadImage(String imageFile) {
+	    else {
+	    	g.setColor(Color.BLUE);
+	    	g.fillRect(0, 0, 800, 600);
+	    }
+	}
+
+	    public void loadImage(String imageFile) {
 	        if (needImage) {
 	            try {
 	                image = ImageIO.read(this.getClass().getResourceAsStream(imageFile));
@@ -22,5 +30,7 @@ public class Fish {
 	            needImage = false;
 	        }
 	    }
+	    public void draw(Graphics g) {
+	    	
 	}
 }
