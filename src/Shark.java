@@ -4,7 +4,7 @@ import java.awt.image.BufferedImage;
 
 import javax.imageio.ImageIO;
 
-public class Fish extends ProjectManager{
+public class Shark {
 	public static BufferedImage image;
 	public static boolean needImage = true;
 	public static boolean gotImage = false;	
@@ -12,7 +12,7 @@ public class Fish extends ProjectManager{
 	    	
 		
 	if (needImage) {
-	    loadImage ("Fish.png");
+	    loadImage ("Shark.png");
 	    if (gotImage) {
 	    	g.drawImage(image, 0, 0, 800, 600, null);
 	    }
@@ -35,3 +35,4 @@ public class Fish extends ProjectManager{
 	    }
 	 
 }
+
