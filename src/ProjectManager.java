@@ -8,6 +8,7 @@ import java.awt.image.BufferedImage;
 
 import javax.imageio.ImageIO;
 import javax.swing.JPanel;
+import javax.swing.Timer;
 
 public class ProjectManager extends JPanel implements KeyListener, ActionListener {
 	public static BufferedImage image;
@@ -15,10 +16,13 @@ public class ProjectManager extends JPanel implements KeyListener, ActionListene
 	public static boolean gotImage = false;
 	final int GAME = 0;
 	int END = 1;
-Fish fish = new Fish();
-ProjectManager manager = new ProjectManager();
-	public ProjectManager() {
+	Timer framedraw;
+	Fish fish = new Fish();
+	int currentState = GAME;
 
+	public ProjectManager() {
+		startGame();
+		loadImage("Background.jpg");
 	}
 
 	void loadImage(String imageFile) {
@@ -34,50 +38,75 @@ ProjectManager manager = new ProjectManager();
 
 	}
 
-	public void draw(Graphics g) {
-		if (needImage) {
-			loadImage("Background.png");
+	public void startGame() {
+		framedraw = new Timer(1000, this);
+		framedraw.start();
+
+	}
+
+	void updateGameState() {
+		if (fish.isActive == false) {
+			currentState = END;
+
 		}
+	}
+
+	void updateEndState() {
+
+	}
+
+
+	@Override
+	public void paintComponent(Graphics g) {
+	
+		if (currentState == GAME) {
+			drawGameState(g);
+	
+		} else if (currentState == END) {
+			drawEndState(g);
+		}
+	}
+
+	void drawGameState(Graphics g) {
 		if (gotImage) {
-			g.drawImage(image, 0, 0, 800, 600, null);
+			g.drawImage(image, 0, 0, WIDTH, HEIGHT, null);
+	System.out.println("After Draw image");
 
 		} else {
-			g.setColor(Color.BLUE);
-			g.fillRect(0, 0, 800, 600);
-
+			g.setColor(Color.BLACK);
+			g.fillRect(0, 0, WIDTH, HEIGHT);
+System.out.println("After draw rectangle");
 		}
 	}
-void drawGameState(Graphics g) {
-	if (gotImage) {
-		g.drawImage(image, 0, 0, WIDTH, HEIGHT, null);
-		manager.draw(g);
-		
-	} else {
-		g.setColor(Color.BLACK);
+
+	void drawEndState(Graphics g) {
+		g.setColor(Color.RED);
 		g.fillRect(0, 0, WIDTH, HEIGHT);
 
+		g.setColor(Color.BLACK);
+		g.drawString("LEAGUE INVADERS", 0, 50);
+
+		g.setColor(Color.BLACK);
+		g.drawString("You got a score of " + 0, 400, END);
+
+		g.setColor(Color.BLACK);
+		g.drawString("Press ENTER to start", 0, 600);
+
 	}
-}
-void drawEndState(Graphics g) {
-	g.setColor(Color.RED);
-	g.fillRect(0, 0, WIDTH, HEIGHT);
 
-	
-	g.setColor(Color.BLACK);
-	g.drawString("LEAGUE INVADERS", 0, 50);
-
-	
-	g.setColor(Color.BLACK);
-	g.drawString("You got a score of " +  0, 400);
-	
-	g.setColor(Color.BLACK);
-	g.drawString("Press ENTER to start", 0, 600);
-	
-}
-@Override
+	@Override
 	public void actionPerformed(ActionEvent e) {
 		// TODO Auto-generated method stub
 
+		if (currentState == GAME) {
+
+			updateGameState();
+		} else if (currentState == END) {
+			updateEndState();
+
+		}
+		System.out.println("action");
+		repaint();
 	}
 
 	@Override

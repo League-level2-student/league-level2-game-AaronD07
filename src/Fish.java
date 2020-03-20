@@ -4,12 +4,13 @@ import java.awt.image.BufferedImage;
 
 import javax.imageio.ImageIO;
 
-public class Fish extends ProjectManager{
+public class Fish {
 	public static BufferedImage image;
 	public static boolean needImage = true;
-	public static boolean gotImage = false;	
+	public static boolean gotImage = false;
+	public boolean isActive=true;
 	   public void draw(Graphics g) {
-	    	
+	    
 		
 	if (needImage) {
 	    loadImage ("Fish.png");
