@@ -9,17 +9,20 @@ public static final int HEIGHT = 800;
 		SharkGame game = new SharkGame();
 game.setup();
 	}
-	
+
 	public SharkGame () {
 		manager = new ProjectManager();
 		frame = new JFrame();
 		frame.addKeyListener(manager);
+
 	}
+	
 	
 	public void setup() {
 		frame.add(manager);
 		frame.setVisible(true);
 		frame.setSize(WIDTH, HEIGHT);
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+	
 	}
 }

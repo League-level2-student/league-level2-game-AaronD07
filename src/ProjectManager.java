@@ -5,6 +5,7 @@ import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.awt.image.BufferedImage;
+import java.util.Random;
 
 import javax.imageio.ImageIO;
 import javax.swing.JPanel;
@@ -17,13 +18,25 @@ public class ProjectManager extends JPanel implements KeyListener, ActionListene
 	final int GAME = 0;
 	int END = 1;
 	Timer framedraw;
-	Fish fish = new Fish();
+	Fish fish;
+	Shark shark;
+	Obstacle obstacle;
+	Obstacle obstacle2;
 	int currentState = GAME;
 
 	public ProjectManager() {
-		startGame();
+		Random random = new Random();
 		loadImage("Background.jpg");
+		fish = new Fish(200, 350, 50, 50, 1);
+		shark = new Shark(5, 300, 150, 150, 1);
+		obstacle = new Obstacle(random.nextInt(600), 0, 50, random.nextInt(450));
+		obstacle2 = new (random2.nextInt(600), 500, 50, random.nextInt(400));
+		startGame();
+		
+		
 	}
+	
+	
 
 	void loadImage(String imageFile) {
 		if (needImage) {
@@ -41,6 +54,7 @@ public class ProjectManager extends JPanel implements KeyListener, ActionListene
 	public void startGame() {
 		framedraw = new Timer(1000, this);
 		framedraw.start();
+		
 
 	}
 
@@ -69,7 +83,10 @@ public class ProjectManager extends JPanel implements KeyListener, ActionListene
 
 	void drawGameState(Graphics g) {
 		if (gotImage) {
-			g.drawImage(image, 0, 0, WIDTH, HEIGHT, null);
+			g.drawImage(image, 0, 0, SharkGame.WIDTH, SharkGame.HEIGHT, null);
+			fish.draw(g);
+			shark.draw(g);
+			obstacle.draw(g);
 	System.out.println("After Draw image");
 
 		} else {
