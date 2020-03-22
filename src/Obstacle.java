@@ -2,9 +2,14 @@ import java.awt.Color;
 import java.awt.Graphics;
 import java.util.Random;
 
-public class Obstacle {
+public class Obstacle extends GameObject{
 
 	
+	public Obstacle(int x, int y, int width, int height) {
+		super(x, y, width, height, 0);
+		// TODO Auto-generated constructor stub
+	}
+
 	public void draw(Graphics g) {
 		Random random = new Random();
 		Random random2 = new Random();

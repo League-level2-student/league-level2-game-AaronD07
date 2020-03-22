@@ -30,7 +30,6 @@ public class ProjectManager extends JPanel implements KeyListener, ActionListene
 		fish = new Fish(200, 350, 50, 50, 1);
 		shark = new Shark(5, 300, 150, 150, 1);
 		obstacle = new Obstacle(random.nextInt(600), 0, 50, random.nextInt(450));
-		obstacle2 = new (random2.nextInt(600), 500, 50, random.nextInt(400));
 		startGame();
 		
 		
