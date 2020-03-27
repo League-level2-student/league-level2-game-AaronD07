@@ -92,6 +92,7 @@ int score= 0;
 			shark.draw(g);
 			obstacle.draw(g);
 	System.out.println("After Draw image");
+	score = score+1;
 
 		} else {
 			g.setColor(Color.BLACK);
@@ -105,13 +106,13 @@ System.out.println("After draw rectangle");
 		g.fillRect(0, 0, WIDTH, HEIGHT);
 
 		g.setColor(Color.BLACK);
-		g.drawString("LEAGUE INVADERS", 0, 50);
+		g.drawString("SharkGame", 0, 50);
 
 		g.setColor(Color.BLACK);
-		g.drawString("You got a score of " + 0, 400, END);
+		g.drawString("You got a score of " + score + 0, 400, END);
 
 		g.setColor(Color.BLACK);
-		g.drawString("Press ENTER to start", 0, 600);
+		g.drawString("Press ENTER to play again", 0, 600);
 
 	}
 
@@ -169,8 +170,15 @@ fish.left();
 				fish.right();
 
 			}
-
 		}
+			if (e.getKeyCode() == KeyEvent.VK_ENTER) {
+				System.out.println("REstart");
+			
+
+					
+				
+		}
+			
 	}
 	public void checkCollision() {
 		
