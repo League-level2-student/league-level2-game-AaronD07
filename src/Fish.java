@@ -17,24 +17,24 @@ public class Fish extends GameObject{
 	}
 	   public void draw(Graphics g) {
 		    g.setColor(Color.BLUE);
-		    g.fillRect(20, 50, 50, 50);
+		    g.fillRect(x, y, width, height);
 
 		if (gotImage) {
-			g.drawImage(image, 200, 350, 50, 50, null);
+			g.drawImage(image, x, y, width, height, null);
 		} else {
 			g.setColor(Color.BLUE);
-			g.fillRect(200, 350, 50, 50);
+			g.fillRect(x, y, width, height);
 			System.out.println();
 		}
 		
 	if (needImage) {
 	    loadImage ("Fish.png");
 	    if (gotImage) {
-	    	g.drawImage(image, 0, 0, 800, 600, null);
+	    	g.drawImage(image, x, y, width, height, null);
 	    }
 	    else {
 	    	g.setColor(Color.BLUE);
-	    	g.fillRect(0, 0, 800, 600);
+	    	g.fillRect(x, y, width, height);
 	    }
 	}
 	   }

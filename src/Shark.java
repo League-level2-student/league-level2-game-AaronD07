@@ -15,24 +15,24 @@ public class Shark extends GameObject{
 	public static boolean gotImage = false;	
 		   public void draw(Graphics g) {
 			    g.setColor(Color.BLUE);
-			    g.fillRect(5, 300, 200, 200);
+			    g.fillRect(x, y, width, height);
 
 			if (gotImage) {
-				g.drawImage(image, 5, 300, 150, 150, null);
+				g.drawImage(image, x, y, width, height, null);
 			} else {
 				g.setColor(Color.BLUE);
-				g.fillRect(5, 50, 150, 150);
+				g.fillRect(x, y, width, height);
 				System.out.println();
 			}
 			
 		if (needImage) {
 		    loadImage ("Shark.jpg");
 		    if (gotImage) {
-		    	g.drawImage(image, 0, 0, 800, 600, null);
+		    	g.drawImage(image, x, y, width, height, null);
 		    }
 		    else {
 		    	g.setColor(Color.BLUE);
-		    	g.fillRect(0, 0, 800, 600);
+		    	g.fillRect(x, y, width, height);
 		    }
 		}
 		   
@@ -40,11 +40,11 @@ public class Shark extends GameObject{
 	if (needImage) {
 	    loadImage ("Shark.jpg");
 	    if (gotImage) {
-	    	g.drawImage(image, 0, 0, 800, 600, null);
+	    	g.drawImage(image, x, y, width, height, null);
 	    }
 	    else {
 	    	g.setColor(Color.BLUE);
-	    	g.fillRect(0, 0, 800, 600);
+	    	g.fillRect(x, y, width, height);
 	    }
 	}
 		   }
@@ -60,6 +60,19 @@ public class Shark extends GameObject{
 	            needImage = false;
 	        }
 	    }
+	    public void right() {
+	        x+=speed;
+	    }
+	    public void left() {
+	        x-=speed;
+	    }
+	    public void up() {
+	        y-=speed;
+	    }
+	    public void down() {
+	        y+=speed;
+	    }
+	 
 	 
 }
 
