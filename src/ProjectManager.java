@@ -21,26 +21,26 @@ public class ProjectManager extends JPanel implements KeyListener, ActionListene
 	Timer framedraw;
 	Fish fish;
 	Shark shark;
-	ArrayList<Obstacle> obstacles =  new ArrayList<Obstacle>();
-	Obstacle obstacle;
-	Obstacle obstacle2;
+	ArrayList<Obstacle> obstacles = new ArrayList<Obstacle>();
 	int currentState = GAME;
-int score= 0;
+	int score = 0;
+
 	public ProjectManager() {
-		obstacles.add(obstacle);
-		obstacles.add(obstacle2);
 
 		Random random = new Random();
+
 		loadImage("Background.jpg");
 		fish = new Fish(200, 350, 50, 50, 1);
 		shark = new Shark(5, 300, 150, 150, 1);
-		obstacle = new Obstacle(random.nextInt(600), 0, 50, random.nextInt(450));
+		int x = random.nextInt(600);
+		obstacles.add(new Obstacle(x, 0, 50, random.nextInt(400)));
+		obstacles.add(new Obstacle(x, 500, 50, random.nextInt(450)));
+		int x2 = random.nextInt(600);
+		obstacles.add(new Obstacle(x2, 0, 50, random.nextInt(400)));
+		obstacles.add(new Obstacle(x2, 500, 50, random.nextInt(450)));
 		startGame();
-		
-		
+
 	}
-	
-	
 
 	void loadImage(String imageFile) {
 		if (needImage) {
@@ -56,9 +56,8 @@ int score= 0;
 	}
 
 	public void startGame() {
-		framedraw = new Timer(1000, this);
+		framedraw = new Timer(1000 / 60, this);
 		framedraw.start();
-		
 
 	}
 
@@ -67,19 +66,22 @@ int score= 0;
 			currentState = END;
 
 		}
+		for (int i = 0; i < obstacles.size(); i++) {
+			obstacles.get(i).update();
+		}
+		checkCollision();
 	}
 
 	void updateEndState() {
 
 	}
 
-
 	@Override
 	public void paintComponent(Graphics g) {
-	
+
 		if (currentState == GAME) {
 			drawGameState(g);
-	score=score+1;
+			score = score + 1;
 		} else if (currentState == END) {
 			drawEndState(g);
 		}
@@ -90,14 +92,16 @@ int score= 0;
 			g.drawImage(image, 0, 0, SharkGame.WIDTH, SharkGame.HEIGHT, null);
 			fish.draw(g);
 			shark.draw(g);
-			obstacle.draw(g);
-	System.out.println("After Draw image");
-	score = score+1;
+
+			score = score + 1;
 
 		} else {
 			g.setColor(Color.BLACK);
 			g.fillRect(0, 0, WIDTH, HEIGHT);
-System.out.println("After draw rectangle");
+
+		}
+		for (int i = 0; i < obstacles.size(); i++) {
+			obstacles.get(i).draw(g);
 		}
 	}
 
@@ -127,7 +131,7 @@ System.out.println("After draw rectangle");
 			updateEndState();
 
 		}
-		System.out.println("action");
+
 		repaint();
 	}
 
@@ -144,7 +148,7 @@ System.out.println("After draw rectangle");
 			System.out.println("UP");
 			if (fish.y >= 5) {
 				fish.up();
-				
+
 			}
 
 		}
@@ -159,7 +163,7 @@ System.out.println("After draw rectangle");
 		if (e.getKeyCode() == KeyEvent.VK_LEFT) {
 			System.out.println("LEFT");
 			if (fish.x >= 5) {
-fish.left();
+				fish.left();
 
 			}
 		}
@@ -171,28 +175,22 @@ fish.left();
 
 			}
 		}
-			if (e.getKeyCode() == KeyEvent.VK_ENTER) {
-				System.out.println("REstart");
-			
+		if (e.getKeyCode() == KeyEvent.VK_ENTER) {
+			System.out.println("REstart");
 
-					
-				
 		}
-			
+
 	}
+
 	public void checkCollision() {
-		
-		
-			for(int o=0; o<obstacles.size(); o++) {
-				if (fish.collisionBox.intersects(obstacles.get(o).collisionBox)) {
-					fish.isActive=false;
-					
-				}
+
+		for (int o = 0; o < obstacles.size(); o++) {
+			if (fish.collisionBox.intersects(obstacles.get(o).collisionBox)) {
+				fish.isActive = false;
+				System.out.println("After collision");
 			}
 		}
-				
-			
-	
+	}
 
 	@Override
 	public void keyReleased(KeyEvent e) {

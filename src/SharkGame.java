@@ -4,7 +4,7 @@ public class SharkGame {
 	ProjectManager manager;
 JFrame frame;
 public static final int WIDTH = 600;
-public static final int HEIGHT = 800;
+public static final int HEIGHT = 600;
 	public static void main(String[] args) {
 		SharkGame game = new SharkGame();
 game.setup();

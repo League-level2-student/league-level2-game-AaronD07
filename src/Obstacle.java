@@ -2,20 +2,27 @@ import java.awt.Color;
 import java.awt.Graphics;
 import java.util.Random;
 
-public class Obstacle extends GameObject{
+public class Obstacle extends GameObject {
+	Random random = new Random();
 
-	
 	public Obstacle(int x, int y, int width, int height) {
 		super(x, y, width, height, 0);
 		// TODO Auto-generated constructor stub
 	}
 
 	public void draw(Graphics g) {
-		Random random = new Random();
-		Random random2 = new Random();
+
 		g.setColor(Color.ORANGE);
-		g.fillRect(random.nextInt(600), 0, 50, random.nextInt(450));
-		g.fillRect(random2.nextInt(600), 500, 50, random.nextInt(400));
-		
+		g.fillRect(x, y, 50, height);
+
+	}
+
+	public void update() {
+		super.update();
+		x--;
+		if (x < 0) {
+			x = SharkGame.WIDTH;
+			height = random.nextInt(600);
+		}
 	}
 }
