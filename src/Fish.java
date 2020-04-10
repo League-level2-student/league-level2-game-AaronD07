@@ -8,8 +8,11 @@ public class Fish extends GameObject{
 	public static BufferedImage image;
 	public static boolean needImage = true;
 	public static boolean gotImage = false;
-	public boolean isActive=true;
 	
+	public boolean up;
+	public boolean down;
+	public boolean left;
+	public boolean right;
 	public Fish(int x, int y, int width, int height, int speed) {
 		super(x, y, width, height, speed);
 		loadImage("fish.jpg");
@@ -50,17 +53,29 @@ public class Fish extends GameObject{
 	            needImage = false;
 	        }
 	    }
-	    public void right() {
-	        x+=speed;
-	    }
-	    public void left() {
-	        x-=speed;
-	    }
-	    public void up() {
-	        y-=speed;
-	    }
-	    public void down() {
-	        y+=speed;
-	    }
+	   public void update() {
+		   super.update();
+		   if(up==true) {
+				if (y >= 5) {
+			   y-=speed;
+		   }
+		   }
+		   if(down==true) {
+				if (y <= 600) {
+
+			   y+= speed;
+				}
+		   }
+		   if(left==true) {
+				if (x >= 5) {
+			   x-=speed;
+		   }
+		   }
+		   if(right==true) {
+			   if (x <= 795) {
+			   x+=speed;
+		   }
+		   }
+		   }
 	 
 }

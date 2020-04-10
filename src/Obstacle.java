@@ -21,8 +21,8 @@ public class Obstacle extends GameObject {
 		super.update();
 		x--;
 		if (x < 0) {
-			x = SharkGame.WIDTH;
-			height = random.nextInt(600);
+		isActive=false;
+		ProjectManager.createObstacles();
 		}
 	}
 }

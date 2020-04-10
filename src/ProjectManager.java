@@ -17,29 +17,34 @@ public class ProjectManager extends JPanel implements KeyListener, ActionListene
 	public static boolean needImage = true;
 	public static boolean gotImage = false;
 	final int GAME = 0;
+	double score = 0;
 	int END = 1;
 	Timer framedraw;
 	Fish fish;
 	Shark shark;
-	ArrayList<Obstacle> obstacles = new ArrayList<Obstacle>();
+	static ArrayList<Obstacle> obstacles = new ArrayList<Obstacle>();
 	int currentState = GAME;
-	int score = 0;
 
 	public ProjectManager() {
-
-		Random random = new Random();
 
 		loadImage("Background.jpg");
 		fish = new Fish(200, 350, 50, 50, 1);
 		shark = new Shark(5, 300, 150, 150, 1);
-		int x = random.nextInt(600);
-		obstacles.add(new Obstacle(x, 0, 50, random.nextInt(400)));
-		obstacles.add(new Obstacle(x, 500, 50, random.nextInt(450)));
-		int x2 = random.nextInt(600);
-		obstacles.add(new Obstacle(x2, 0, 50, random.nextInt(400)));
-		obstacles.add(new Obstacle(x2, 500, 50, random.nextInt(450)));
+		createObstacles();
 		startGame();
 
+	}
+
+	public static void createObstacles() {
+		obstacles.clear();
+		Random random = new Random();
+		int x = SharkGame.WIDTH;
+		int obstacleHeight3 = random.nextInt(450);
+		int obstacleHeight4 = SharkGame.HEIGHT - obstacleHeight3 - 150;
+		obstacles.add(new Obstacle(x, 0, 50, obstacleHeight3));
+		obstacles.add(new Obstacle(x, SharkGame.HEIGHT - obstacleHeight4, 50, obstacleHeight4));
+
+	
 	}
 
 	void loadImage(String imageFile) {
@@ -55,6 +60,14 @@ public class ProjectManager extends JPanel implements KeyListener, ActionListene
 
 	}
 
+	public void purgeObjects() {
+		for (int i = 0; i < obstacles.size(); i++) {
+			if (obstacles.get(i).isActive == false) {
+				obstacles.remove(i);
+			}
+		
+		}
+	}
 	public void startGame() {
 		framedraw = new Timer(1000 / 60, this);
 		framedraw.start();
@@ -62,13 +75,16 @@ public class ProjectManager extends JPanel implements KeyListener, ActionListene
 	}
 
 	void updateGameState() {
+		fish.update();
 		if (fish.isActive == false) {
 			currentState = END;
 
 		}
 		for (int i = 0; i < obstacles.size(); i++) {
 			obstacles.get(i).update();
+
 		}
+		score = score + 0.05;
 		checkCollision();
 	}
 
@@ -81,7 +97,7 @@ public class ProjectManager extends JPanel implements KeyListener, ActionListene
 
 		if (currentState == GAME) {
 			drawGameState(g);
-			score = score + 1;
+
 		} else if (currentState == END) {
 			drawEndState(g);
 		}
@@ -93,11 +109,9 @@ public class ProjectManager extends JPanel implements KeyListener, ActionListene
 			fish.draw(g);
 			shark.draw(g);
 
-			score = score + 1;
-
 		} else {
 			g.setColor(Color.BLACK);
-			g.fillRect(0, 0, WIDTH, HEIGHT);
+			g.fillRect(0, 0, SharkGame.WIDTH, SharkGame.HEIGHT);
 
 		}
 		for (int i = 0; i < obstacles.size(); i++) {
@@ -107,16 +121,16 @@ public class ProjectManager extends JPanel implements KeyListener, ActionListene
 
 	void drawEndState(Graphics g) {
 		g.setColor(Color.RED);
-		g.fillRect(0, 0, WIDTH, HEIGHT);
+		g.fillRect(0, 0, SharkGame.WIDTH, SharkGame.HEIGHT);
 
 		g.setColor(Color.BLACK);
 		g.drawString("SharkGame", 0, 50);
 
 		g.setColor(Color.BLACK);
-		g.drawString("You got a score of " + score + 0, 400, END);
+		g.drawString("You got a score of " + score, 0, 100);
 
 		g.setColor(Color.BLACK);
-		g.drawString("Press ENTER to play again", 0, 600);
+		g.drawString("Press ENTER to play again", 0, 125);
 
 	}
 
@@ -146,37 +160,34 @@ public class ProjectManager extends JPanel implements KeyListener, ActionListene
 		// TODO Auto-generated method stub
 		if (e.getKeyCode() == KeyEvent.VK_UP) {
 			System.out.println("UP");
-			if (fish.y >= 5) {
-				fish.up();
 
-			}
+			fish.up = true;
 
 		}
 		if (e.getKeyCode() == KeyEvent.VK_DOWN) {
 			System.out.println("DOWN");
 
-			if (fish.y <= 600) {
-				fish.down();
-			}
-
+			fish.down = true;
 		}
+
 		if (e.getKeyCode() == KeyEvent.VK_LEFT) {
 			System.out.println("LEFT");
-			if (fish.x >= 5) {
-				fish.left();
 
-			}
+			fish.left = true;
+
 		}
 		if (e.getKeyCode() == KeyEvent.VK_RIGHT) {
 			System.out.println("RIGHT");
-			if (fish.x <= 795) {
 
-				fish.right();
+			fish.right = true;
 
-			}
 		}
 		if (e.getKeyCode() == KeyEvent.VK_ENTER) {
-			System.out.println("REstart");
+			System.out.println("Restart");
+			currentState = GAME;
+			fish.isActive = true;
+			fish = new Fish(200, 350, 50, 50, 1);
+			score = 0;
 
 		}
 
@@ -188,6 +199,8 @@ public class ProjectManager extends JPanel implements KeyListener, ActionListene
 			if (fish.collisionBox.intersects(obstacles.get(o).collisionBox)) {
 				fish.isActive = false;
 				System.out.println("After collision");
+				currentState = END;
+				createObstacles();
 			}
 		}
 	}
@@ -195,7 +208,30 @@ public class ProjectManager extends JPanel implements KeyListener, ActionListene
 	@Override
 	public void keyReleased(KeyEvent e) {
 		// TODO Auto-generated method stub
+		if (e.getKeyCode() == KeyEvent.VK_UP) {
+			System.out.println("UP");
 
+			fish.up = false;
+
+		}
+		if (e.getKeyCode() == KeyEvent.VK_DOWN) {
+			System.out.println("DOWN");
+
+			fish.down = false;
+		}
+
+		if (e.getKeyCode() == KeyEvent.VK_LEFT) {
+			System.out.println("LEFT");
+
+			fish.left = false;
+
+		}
+		if (e.getKeyCode() == KeyEvent.VK_RIGHT) {
+			System.out.println("RIGHT");
+
+			fish.right = false;
+
+		}
 	}
 
 }
