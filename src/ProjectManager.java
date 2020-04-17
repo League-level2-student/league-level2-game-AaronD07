@@ -22,17 +22,31 @@ public class ProjectManager extends JPanel implements KeyListener, ActionListene
 	Timer framedraw;
 	Fish fish;
 	Shark shark;
+	static ArrayList<Bullets> bullets = new ArrayList<Bullets>();
+
 	static ArrayList<Obstacle> obstacles = new ArrayList<Obstacle>();
 	int currentState = GAME;
-
+FishingRod rod;
 	public ProjectManager() {
 
 		loadImage("Background.jpg");
+	
 		fish = new Fish(200, 350, 50, 50, 1);
 		shark = new Shark(5, 300, 150, 150, 1);
+		createFishingRod();
 		createObstacles();
 		startGame();
 
+	}
+	public void createFishingRod() {
+		
+		Random random = new Random();
+		rod = new FishingRod(random.nextInt(800),0 , 10, 0, 1);
+	}
+	
+	public void createBullets() {
+		bullets.clear();
+	
 	}
 
 	public static void createObstacles() {
@@ -76,6 +90,7 @@ public class ProjectManager extends JPanel implements KeyListener, ActionListene
 
 	void updateGameState() {
 		fish.update();
+		rod.update();
 		if (fish.isActive == false) {
 			currentState = END;
 
@@ -86,6 +101,7 @@ public class ProjectManager extends JPanel implements KeyListener, ActionListene
 		}
 		score = score + 0.05;
 		checkCollision();
+		
 	}
 
 	void updateEndState() {
@@ -108,6 +124,7 @@ public class ProjectManager extends JPanel implements KeyListener, ActionListene
 			g.drawImage(image, 0, 0, SharkGame.WIDTH, SharkGame.HEIGHT, null);
 			fish.draw(g);
 			shark.draw(g);
+			rod.draw(g);
 
 		} else {
 			g.setColor(Color.BLACK);
@@ -128,6 +145,8 @@ public class ProjectManager extends JPanel implements KeyListener, ActionListene
 
 		g.setColor(Color.BLACK);
 		g.drawString("You got a score of " + score, 0, 100);
+		
+		g.drawString("Try to avoid the fishing rods", 0, 150);
 
 		g.setColor(Color.BLACK);
 		g.drawString("Press ENTER to play again", 0, 125);
@@ -201,6 +220,12 @@ public class ProjectManager extends JPanel implements KeyListener, ActionListene
 				System.out.println("After collision");
 				currentState = END;
 				createObstacles();
+			}
+			else if (fish.collisionBox.intersects(rod.collisionBox)) {
+				fish.isActive = false;
+				System.out.println("After collision");
+				currentState = END;
+				createFishingRod();
 			}
 		}
 	}
