@@ -20,34 +20,42 @@ public class ProjectManager extends JPanel implements KeyListener, ActionListene
 	double score = 0;
 	int END = 1;
 	Timer framedraw;
-	Fish fish;
+	public static Fish fish;
 	Shark shark;
-	static ArrayList<Bullets> bullets = new ArrayList<Bullets>();
-
+	Bullets bullet;
+int bulletWidth;
+int bulletHeight;
 	static ArrayList<Obstacle> obstacles = new ArrayList<Obstacle>();
 	int currentState = GAME;
-FishingRod rod;
+	FishingRod rod;
+
 	public ProjectManager() {
 
 		loadImage("Background.jpg");
-	
-		fish = new Fish(200, 350, 50, 50, 1);
-		shark = new Shark(5, 300, 150, 150, 1);
+
+		fish = new Fish(200, 350, 50, 50, 3);
+		createShark();
+bulletWidth=40;
+bulletHeight=15;
+		bullet = new Bullets(20, shark.y+75, bulletWidth, bulletHeight, 4);		
 		createFishingRod();
 		createObstacles();
+		
 		startGame();
 
 	}
+
 	public void createFishingRod() {
-		
+
 		Random random = new Random();
-		rod = new FishingRod(random.nextInt(800),0 , 10, 0, 1);
+		rod = new FishingRod(random.nextInt(800), 0, 10, 0, 1);
 	}
 	
-	public void createBullets() {
-		bullets.clear();
-	
+	public void createShark() {
+		shark = new Shark(5, 0, 150, 150, 1);
 	}
+
+	
 
 	public static void createObstacles() {
 		obstacles.clear();
@@ -58,7 +66,6 @@ FishingRod rod;
 		obstacles.add(new Obstacle(x, 0, 50, obstacleHeight3));
 		obstacles.add(new Obstacle(x, SharkGame.HEIGHT - obstacleHeight4, 50, obstacleHeight4));
 
-	
 	}
 
 	void loadImage(String imageFile) {
@@ -79,9 +86,11 @@ FishingRod rod;
 			if (obstacles.get(i).isActive == false) {
 				obstacles.remove(i);
 			}
-		
+
 		}
+
 	}
+
 	public void startGame() {
 		framedraw = new Timer(1000 / 60, this);
 		framedraw.start();
@@ -91,6 +100,7 @@ FishingRod rod;
 	void updateGameState() {
 		fish.update();
 		rod.update();
+		shark.update();
 		if (fish.isActive == false) {
 			currentState = END;
 
@@ -99,9 +109,17 @@ FishingRod rod;
 			obstacles.get(i).update();
 
 		}
+
 		score = score + 0.05;
 		checkCollision();
-		
+		bullet.update();
+		if (bullet.isActive==false) {
+			bulletWidth=bulletWidth+8;
+			bulletHeight=bulletHeight+4;
+			bullet = new Bullets(20, shark.y+75, bulletWidth, bulletHeight, 4);
+			
+
+		}
 	}
 
 	void updateEndState() {
@@ -123,8 +141,10 @@ FishingRod rod;
 		if (gotImage) {
 			g.drawImage(image, 0, 0, SharkGame.WIDTH, SharkGame.HEIGHT, null);
 			fish.draw(g);
+			bullet.draw(g);
 			shark.draw(g);
 			rod.draw(g);
+			
 
 		} else {
 			g.setColor(Color.BLACK);
@@ -134,6 +154,8 @@ FishingRod rod;
 		for (int i = 0; i < obstacles.size(); i++) {
 			obstacles.get(i).draw(g);
 		}
+		g.drawString( "Your score is " + (int)(score), 250, 10);
+
 	}
 
 	void drawEndState(Graphics g) {
@@ -144,8 +166,8 @@ FishingRod rod;
 		g.drawString("SharkGame", 0, 50);
 
 		g.setColor(Color.BLACK);
-		g.drawString("You got a score of " + score, 0, 100);
-		
+		g.drawString("You got a score of " + (int)(score), 0, 100);
+
 		g.drawString("Try to avoid the fishing rods", 0, 150);
 
 		g.setColor(Color.BLACK);
@@ -205,7 +227,7 @@ FishingRod rod;
 			System.out.println("Restart");
 			currentState = GAME;
 			fish.isActive = true;
-			fish = new Fish(200, 350, 50, 50, 1);
+			fish = new Fish(200, 350, 50, 50, 3);
 			score = 0;
 
 		}
@@ -220,12 +242,21 @@ FishingRod rod;
 				System.out.println("After collision");
 				currentState = END;
 				createObstacles();
-			}
-			else if (fish.collisionBox.intersects(rod.collisionBox)) {
+				shark.y=0;
+
+			} else if (fish.collisionBox.intersects(rod.collisionBox)) {
 				fish.isActive = false;
 				System.out.println("After collision");
 				currentState = END;
 				createFishingRod();
+				shark.y=0;
+
+			} else if (fish.collisionBox.intersects(bullet.collisionBox)) {
+				fish.isActive = false;
+				bulletWidth=40;
+				bulletHeight=15;
+				bullet = new Bullets(20, shark.y+75, bulletWidth, bulletHeight, 4);
+			shark.y=0;
 			}
 		}
 	}

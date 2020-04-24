@@ -15,7 +15,7 @@ public class Fish extends GameObject{
 	public boolean right;
 	public Fish(int x, int y, int width, int height, int speed) {
 		super(x, y, width, height, speed);
-		loadImage("fish.jpg");
+		loadImage("Fish.png");
 	
 	}
 	   public void draw(Graphics g) {
