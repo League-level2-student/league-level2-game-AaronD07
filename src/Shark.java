@@ -27,7 +27,7 @@ public class Shark extends GameObject {
 		}
 
 		if (needImage) {
-			loadImage("Shark.jpg");
+			loadImage("Shark.png");
 			if (gotImage) {
 				g.drawImage(image, x, y, width, height, null);
 			} else {
@@ -37,7 +37,7 @@ public class Shark extends GameObject {
 		}
 
 		if (needImage) {
-			loadImage("Shark.jpg");
+			loadImage("Shark.png");
 			if (gotImage) {
 				g.drawImage(image, x, y, width, height, null);
 			} else {
